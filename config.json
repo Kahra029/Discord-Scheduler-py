@@ -1,0 +1,34 @@
+{
+    "discord_token":"DISCORD BOT TOKEN",
+    "webhook_url":"WEBHOOK URL",
+    "download_path":".",
+    "calendar":{
+      "calendar":"https://www.googleapis.com/auth/calendar",
+      "id": "CALENDAR USER",
+      "calendar_url":"CALENDAR URL",
+      "calendar_text":"!calendar",
+      "list_text":"!eventlist",
+      "start_text":"!eventadd ",
+      "long_event_text":"!eventadd-long ",
+      "delete_text":"!eventdelete "
+    },
+    "webhook":{
+      "user_name":"USER",
+      "avatar_url":"AVATAR URL",
+      "color":"8dbbff",
+      "message":{
+        "calendar_message":"カレンダー表示\n",
+        "insert_message":"予定を追加しました",
+        "insert_error_message":"カレンダーに予定が追加できませんでした。 ```YYYY/mm/DD HH:mm タイトル 関連URL```の形で再度送信をお願いします",
+        "long_event_error_message":"カレンダーに予定が追加できませんでした。 ```YYYY/mm/DD YYYY/mm/DD タイトル 関連URL```の形で再度送信をお願いします",
+        "event_message":"今週の予定はこちらです",
+        "event_none_message":"来週まで予定はありません",
+        "event_error_message":"予定が取得できませんでした\n",
+        "delete_message":"イベントを削除しました",
+        "delete_error_message": "イベントが削除できませんでした\n",
+        "start_message":"もうすぐこちらのイベントが始まります",
+        "weekly_event_message":"今週はこちらの予定があります",
+        "daily_event_message":"本日はこちらの予定があります"
+      }
+    }
+}
