@@ -1,6 +1,4 @@
 import  json
-import datetime
-import random
 from api.calendarApi import CalendarApi
 from data.calendarData import CalendarData
 from api.webhook import Webhook
@@ -19,16 +17,15 @@ class SchedulerLogic():
 
     def getEvent(self):
         try:
-            calData = CalendarData()
             calendar = CalendarApi()
-            result = calendar.get(day=0, routine=True)
+            result = calendar.get(routine=True)
 
             webhook = Webhook()
             webhookData = WebhookData()
             webhookContent = WebhookContent()
 
             if result != []:
-                message = self.config["webhook"].get('message').get('event_message')
+                message = self.config["webhook"].get('event_message')
                 body = webhookContent.createMessage(message)
 
                 for event in result:
@@ -50,9 +47,8 @@ class SchedulerLogic():
                 
     def getWeeklyEvents(self):
         try:
-            calData = CalendarData()
             calendar = CalendarApi()
-            result = calendar.get()
+            result = calendar.get(day=7, routine=False)
 
             webhook = Webhook()
             webhookData = WebhookData()
@@ -81,7 +77,7 @@ class SchedulerLogic():
                 webhook.send(body)
 
             else:
-                message = self.config["webhook"].get('message').get('event_none_message')
+                message = self.config["webhook"].get('event_none_message')
                 body = webhookContent.createMessage(message)
                 webhook.send(body)
 
@@ -90,7 +86,6 @@ class SchedulerLogic():
 
     def getDailyEvent(self):
         try:
-            calData = CalendarData()
             calendar = CalendarApi()
             result = calendar.get(day=1, routine=False)
 
@@ -99,7 +94,7 @@ class SchedulerLogic():
             webhookContent = WebhookContent()
 
             if result != []:
-                message = self.config["webhook"].get('message').get('daily_event_message')
+                message = self.config["webhook"].get('daily_event_message')
                 body = webhookContent.createMessage(message)
 
                 for event in result:

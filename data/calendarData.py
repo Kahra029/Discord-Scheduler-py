@@ -1,36 +1,5 @@
 import datetime
 
-class CalendarContent():
-    def createInsertData(self, data):
-        body = {
-            'summary':data.summary,
-            'description': data.description,
-            'start':{
-                'dateTime': datetime.datetime(data.year, data.month, data.day, data.hour, data.minute).isoformat(),
-                'timeZone': 'Japan'
-            },
-            'end': {
-                'dateTime': datetime.datetime(data.year, data.month, data.day, data.hour+1, data.minute).isoformat(),
-                'timeZone': 'Japan'
-            },
-        }
-        return body
-
-    def createLongEventData(self, data):
-        body = {
-            'summary':data.summary,
-            'description': data.description,
-            'start':{
-                'date': data.date,
-                'timeZone': 'Japan'
-            },
-            'end': {
-                'date': data.endDate,
-                'timeZone': 'Japan'
-            },
-        }
-        return body
-
 class CalendarData():
     @property
     def eventId(self):

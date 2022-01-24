@@ -1,53 +1,16 @@
-import os
-import re
-import json
 import schedule
-import discord
-from time import sleep
-from logic.pixivwork import PixivWork
-from logic.calendarLogic import CalendarLogic
+import time
+from logic.schedulerLogic import SchedulerLogic
 
-with open('config.json', 'r') as f:
-    config = json.load(f)
-discordToken = config['discord_token']
-calendarText = config['calendar'].get('calendar_text')
-listText = config['calendar'].get('list_text')
-startText = config['calendar'].get('start_text')
-longEventText = config['calendar'].get('long_event_text')
-deleteText = config['calendar'].get('delete_text')
 
-client = discord.Client(ws = int(os.environ.get('PORT', 5000)))
+def EventSchedule():
+    logic = SchedulerLogic()
+    schedule.every().monday.at("08:45").do(logic.getWeeklyEvents)
+    schedule.every().day.at("09:00").do(logic.getDailyEvent)
+    schedule.every(1).hour.at(":00").do(logic.getEvent)
 
-@client.event
-async def on_ready():
-    print('READY')
+EventSchedule()
 
-@client.event
-async def on_message(message):
-    content = message.content
-
-    if content == calendarText:
-        logic = CalendarLogic()
-        result = logic.calendarUrl()
-
-    if content == listText:
-        logic = CalendarLogic()
-        result = logic.get()
-        
-    elif re.search(startText, content):
-        event = content.replace(startText, '')
-        logic = CalendarLogic()
-        logic.insert(event)
-
-    elif re.search(longEventText, content):
-        event = content.replace(longEventText, '')
-        logic = CalendarLogic()
-        logic.insertLongEvent(event)
-
-    elif re.search(deleteText, content):
-        eventId = content.replace(deleteText, '')
-        logic = CalendarLogic()
-        logic.delete(eventId)
-
-client.run(discordToken)
-
+while True:
+    schedule.run_pending()
+    time.sleep(1)

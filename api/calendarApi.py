@@ -44,14 +44,13 @@ class CalendarApi():
     def eventId(self, val):
         self.__eventId = val
 
-    def get(self, day=7, routine=False):
-        results = []
+    def get(self, day=0, routine=False):
         now = datetime.datetime.now(datetime.timezone.utc)
 
         timeMax = now + datetime.timedelta(days=day)
         if routine:
-            timeMax = timeMax + datetime.timedelta(hours=1)
-            timeMax = datetime.datetime(timeMax.year, timeMax.month, timeMax.day, timeMax.hour, 59, tzinfo=datetime.timezone.utc)
+            timeMax = timeMax + datetime.timedelta(minutes=59)
+            timeMax = datetime.datetime(timeMax.year, timeMax.month, timeMax.day, timeMax.hour, timeMax.minutes, tzinfo=datetime.timezone.utc)
         else:
             timeMax = datetime.datetime(timeMax.year, timeMax.month, timeMax.day, 23, 59, tzinfo=datetime.timezone.utc)
 
