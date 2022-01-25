@@ -42,7 +42,7 @@ class WebhookContent():
     def hadukiAvatar(self):
         return self.__hadukiAvatar
 
-    def createMessage(self, message):
+    def create(self, message):
         body = {
             "username": self.userName,
             "avatar_url": self.avatarUrl,

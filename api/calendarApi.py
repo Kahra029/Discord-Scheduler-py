@@ -1,4 +1,3 @@
-import re
 import json
 import datetime
 from google.auth import load_credentials_from_file
@@ -11,7 +10,6 @@ class CalendarApi():
             config = json.load(f)
             self.__calendarId = config["calendar"].get('id')
 
-        # Preparation for Google API
         SCOPES = [config["calendar"].get('calendar')]
         gapi_creds = load_credentials_from_file('credentials.json', SCOPES)[0]
         self.__service = build('calendar', 'v3', credentials=gapi_creds)
@@ -47,12 +45,12 @@ class CalendarApi():
     def get(self, day=0, routine=False):
         now = datetime.datetime.now(datetime.timezone.utc)
 
-        timeMax = now + datetime.timedelta(days=day)
+        period = now + datetime.timedelta(days=day)
         if routine:
-            timeMax = timeMax + datetime.timedelta(minutes=59)
+            timeMax = period + datetime.timedelta(minutes=59)
             timeMax = datetime.datetime(timeMax.year, timeMax.month, timeMax.day, timeMax.hour, timeMax.minutes, tzinfo=datetime.timezone.utc)
         else:
-            timeMax = datetime.datetime(timeMax.year, timeMax.month, timeMax.day, 23, 59, tzinfo=datetime.timezone.utc)
+            timeMax = datetime.datetime(period.year, period.month, period.day, 23, 59, tzinfo=datetime.timezone.utc)
 
         events_result = self.service.events().list(
             calendarId=self.calendarId, 

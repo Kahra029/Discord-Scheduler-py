@@ -1,5 +1,3 @@
-import datetime
-
 class CalendarData():
     @property
     def eventId(self):

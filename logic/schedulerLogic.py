@@ -1,6 +1,5 @@
 import  json
 from api.calendarApi import CalendarApi
-from data.calendarData import CalendarData
 from api.webhook import Webhook
 from data.webhookData import WebhookData
 from data.webhookData import WebhookContent
@@ -26,7 +25,7 @@ class SchedulerLogic():
 
             if result != []:
                 message = self.config["webhook"].get('event_message')
-                body = webhookContent.createMessage(message)
+                body = webhookContent.create(message)
 
                 for event in result:
                     webhookData.summary = event['summary']
@@ -56,7 +55,7 @@ class SchedulerLogic():
 
             if result != []:
                 message = self.config["webhook"].get('weekly_event_message')
-                body = webhookContent.createMessage(message)
+                body = webhookContent.create(message)
 
                 for event in result:
                     webhookData.summary = event['summary']
@@ -78,7 +77,7 @@ class SchedulerLogic():
 
             else:
                 message = self.config["webhook"].get('event_none_message')
-                body = webhookContent.createMessage(message)
+                body = webhookContent.create(message)
                 webhook.send(body)
 
         except Exception as e:
@@ -95,7 +94,8 @@ class SchedulerLogic():
 
             if result != []:
                 message = self.config["webhook"].get('daily_event_message')
-                body = webhookContent.createMessage(message)
+                body = webhookContent.create(message)
+                eventFlag = False
 
                 for event in result:
                     webhookData.summary = event['summary']
@@ -108,7 +108,9 @@ class SchedulerLogic():
                         webhookData.time = start[1].replace(':00+09:00','')
                         embeds = webhookContent.createEmbeds(webhookData)
                         body["embeds"].append(embeds)
-                webhook.send(body)
+                        eventFlag = True
+                if(eventFlag):
+                    webhook.send(body)
 
         except Exception as e:
             print(e)
