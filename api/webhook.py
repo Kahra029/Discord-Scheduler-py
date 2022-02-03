@@ -5,7 +5,7 @@ class Webhook():
     def __init__(self, body = None):
         with open('config.json', 'r') as f:
             config = json.load(f)
-        self.__url = config["webhook_url"]
+        self.__url = config['discord'].get('webhook')
 
     @property
     def body(self):
