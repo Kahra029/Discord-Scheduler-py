@@ -1,5 +1,7 @@
 import  json
+import datetime
 from api.calendarApi import CalendarApi
+from data.calendarData import CalendarData
 from api.webhook import Webhook
 from data.webhookData import WebhookData
 from data.webhookData import WebhookContent
@@ -14,7 +16,7 @@ class SchedulerLogic():
     def config(self):
         return self.__config
 
-    def getEvent(self):
+    def getEvents(self):
         try:
             calendar = CalendarApi()
             result = calendar.get(routine=True)
@@ -24,22 +26,37 @@ class SchedulerLogic():
             webhookContent = WebhookContent()
 
             if result != []:
-                message = self.config["webhook"].get('event_message')
-                body = webhookContent.create(message)
+                eventFlag = False
+                body = None
 
                 for event in result:
                     webhookData.summary = event['summary']
                     webhookData.description = event.get('description', '')
                     webhookData.eventId = event['id']
+                    start = event['start'].get('dateTime', '')
 
-                    start = event['start'].get('dateTime','').split('T')
-                    if start != ['']:
-                        webhookData.date = start[0].replace('-','/')
-                        webhookData.time = start[1].replace(':00+09:00','')
+                    if start != '':
+                        eventFlag = True
+
+                        start = start.replace('T',' ').replace(':00+09:00','')
+                        startDte = datetime.datetime.strptime(start, '%Y-%m-%d %H:%M')
+                        now = datetime.datetime.now()
+
+                        if body == None:
+                            if now > startDte:
+                                message = self.config["webhook"].get('event_start_message')
+                            else:
+                                message = self.config["webhook"].get('event_message')
+                            body = webhookContent.create(message)
+                        
+                        starts = start.split(' ')
+                        webhookData.date = starts[0].replace('-','/')
+                        webhookData.time = starts[1]
                         embeds = webhookContent.createEmbeds(webhookData)
+                        body["embeds"].append(embeds)
 
-                    body["embeds"].append(embeds)
-                webhook.send(body)
+                if eventFlag:
+                    webhook.send(body)
 
         except Exception as e:
             print(e)
@@ -83,7 +100,7 @@ class SchedulerLogic():
         except Exception as e:
             print(e)
 
-    def getDailyEvent(self):
+    def getDailyEvents(self):
         try:
             calendar = CalendarApi()
             result = calendar.get(day=1, routine=False)
@@ -104,11 +121,12 @@ class SchedulerLogic():
 
                     start = event['start'].get('dateTime','').split('T')
                     if start != ['']:
+                        eventFlag = True
+
                         webhookData.date = start[0].replace('-','/')
                         webhookData.time = start[1].replace(':00+09:00','')
                         embeds = webhookContent.createEmbeds(webhookData)
                         body["embeds"].append(embeds)
-                        eventFlag = True
                 if(eventFlag):
                     webhook.send(body)
 

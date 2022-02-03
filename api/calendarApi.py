@@ -2,7 +2,6 @@ import json
 import datetime
 from google.auth import load_credentials_from_file
 from googleapiclient.discovery import build
-from data.calendarData import CalendarData
 
 class CalendarApi():
     def __init__(self):
@@ -63,11 +62,3 @@ class CalendarApi():
         events = events_result.get('items', [])
 
         return events
-
-    def insert(self, body):
-        result = self.service.events().insert(calendarId=self.calendarId, body=body).execute()
-        return result
-
-    def delete(self, eventId):
-        result = self.service.events().delete(calendarId=self.calendarId, eventId=eventId).execute()
-        return result
