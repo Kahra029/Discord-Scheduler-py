@@ -111,7 +111,6 @@ class SchedulerLogic():
 
             if result != []:
                 message = self.config["webhook"].get('message').get('daily_event_message')
-                print(message)
                 body = webhookContent.create(message)
                 eventFlag = False
 
@@ -131,7 +130,6 @@ class SchedulerLogic():
                         body["embeds"].append(embeds)
                 if(eventFlag):
                     webhook.send(body)
-
-                print(body)
+                    
         except Exception as e:
             print(e)
