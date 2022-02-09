@@ -44,9 +44,9 @@ class SchedulerLogic():
 
                         if body == None:
                             if now > startDte:
-                                message = self.config["webhook"].get('event_start_message')
+                                message = self.config["webhook"].get('message').get('event_start_message')
                             else:
-                                message = self.config["webhook"].get('event_message')
+                                message = self.config["webhook"].get('message').get('event_message')
                             body = webhookContent.create(message)
                         
                         starts = start.split(' ')
@@ -71,7 +71,7 @@ class SchedulerLogic():
             webhookContent = WebhookContent()
 
             if result != []:
-                message = self.config["webhook"].get('weekly_event_message')
+                message = self.config["webhook"].get('message').get('weekly_event_message')
                 body = webhookContent.create(message)
 
                 for event in result:
@@ -93,7 +93,7 @@ class SchedulerLogic():
                 webhook.send(body)
 
             else:
-                message = self.config["webhook"].get('event_none_message')
+                message = self.config["webhook"].get('message').get('event_none_message')
                 body = webhookContent.create(message)
                 webhook.send(body)
 
@@ -110,7 +110,8 @@ class SchedulerLogic():
             webhookContent = WebhookContent()
 
             if result != []:
-                message = self.config["webhook"].get('daily_event_message')
+                message = self.config["webhook"].get('message').get('daily_event_message')
+                print(message)
                 body = webhookContent.create(message)
                 eventFlag = False
 
@@ -119,6 +120,7 @@ class SchedulerLogic():
                     webhookData.description = event.get('description', '')
                     webhookData.eventId = event['id']
 
+                    # 終日のイベントを除外
                     start = event['start'].get('dateTime','').split('T')
                     if start != ['']:
                         eventFlag = True
@@ -130,5 +132,6 @@ class SchedulerLogic():
                 if(eventFlag):
                     webhook.send(body)
 
+                print(body)
         except Exception as e:
             print(e)
