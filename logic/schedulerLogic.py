@@ -19,7 +19,7 @@ class SchedulerLogic():
     def getEvents(self):
         try:
             calendar = CalendarApi()
-            result = calendar.get(routine=True)
+            result = calendar.getEventsByHours()
 
             webhook = Webhook()
             webhookData = WebhookData()
@@ -64,7 +64,7 @@ class SchedulerLogic():
     def getWeeklyEvents(self):
         try:
             calendar = CalendarApi()
-            result = calendar.get(day=7, routine=False)
+            result = calendar.getEventsByDays(days=7)
 
             webhook = Webhook()
             webhookData = WebhookData()
@@ -103,7 +103,7 @@ class SchedulerLogic():
     def getDailyEvents(self):
         try:
             calendar = CalendarApi()
-            result = calendar.get(day=1, routine=False)
+            result = calendar.getEventsByDays(days=0)
 
             webhook = Webhook()
             webhookData = WebhookData()
